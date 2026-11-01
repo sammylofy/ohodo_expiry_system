@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h3 class="fw-bold mb-0">{{ page_title }}</h3>
+    <a href="{% url 'product_list' %}" class="btn btn-outline-secondary w-100 w-md-auto">
+        <i class="bi bi-arrow-left me-1"></i>Back to Products
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-3 p-md-4">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="row g-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Product Name *</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}<div class="text-danger small">{{ form.name.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Category *</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}<div class="text-danger small">{{ form.category.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Supplier (Optional)</label>
+                    {{ form.supplier }}
+                    {% if form.supplier.errors %}<div class="text-danger small">{{ form.supplier.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Batch Number (Unique) *</label>
+                    {{ form.batch_number }}
+                    {% if form.batch_number.errors %}<div class="text-danger small">{{ form.batch_number.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Barcode (Optional Text)</label>
+                    {{ form.barcode }}
+                    {% if form.barcode.errors %}<div class="text-danger small">{{ form.barcode.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Quantity in Stock *</label>
+                    {{ form.quantity }}
+                    {% if form.quantity.errors %}<div class="text-danger small">{{ form.quantity.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Cost Price (₦) *</label>
+                    {{ form.cost_price }}
+                    {% if form.cost_price.errors %}<div class="text-danger small">{{ form.cost_price.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Selling Price (₦) *</label>
+                    {{ form.selling_price }}
+                    {% if form.selling_price.errors %}<div class="text-danger small">{{ form.selling_price.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Manufacturing Date *</label>
+                    {{ form.manufacturing_date }}
+                    {% if form.manufacturing_date.errors %}<div class="text-danger small">{{ form.manufacturing_date.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Expiry Date *</label>
+                    {{ form.expiry_date }}
+                    {% if form.expiry_date.errors %}<div class="text-danger small">{{ form.expiry_date.errors|striptags }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <button type="submit" class="btn btn-primary px-4 w-100 w-md-auto">
+                    <i class="bi bi-check2-circle me-1"></i>Save Product
+                </button>
+                <a href="{% url 'product_list' %}" class="btn btn-outline-secondary px-4 w-100 w-md-auto">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

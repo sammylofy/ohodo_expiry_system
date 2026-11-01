@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Sales History{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h3 class="fw-bold mb-0">Sales History</h3>
+        <p class="small text-muted-custom mb-0">
+            Total Units Sold: <strong>{{ total_units_sold }}</strong> &bull;
+            Total Revenue: <strong>₦{{ total_revenue|floatformat:2|intcomma }}</strong>
+        </p>
+    </div>
+    <a href="{% url 'sales' %}" class="btn btn-primary w-100 w-md-auto">
+        <i class="bi bi-plus-circle me-1"></i>New Sale
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Batch</th>
+                    <th>Qty Sold</th>
+                    <th>Unit Price</th>
+                    <th>Total Amount</th>
+                    <th>Cashier</th>
+                    <th>Date & Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="fw-semibold text-break">{{ sale.product.name }}</td>
+                    <td><code>{{ sale.product.batch_number }}</code></td>
+                    <td>{{ sale.quantity_sold }}</td>
+                    <td>₦{{ sale.product.selling_price|floatformat:2|intcomma }}</td>
+                    <td class="fw-bold text-success">₦{{ sale.total_amount|floatformat:2|intcomma }}</td>
+                    <td>{{ sale.sold_by.username|default:"Staff" }}</td>
+                    <td class="small">{{ sale.sold_at|date:"d M Y, H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-4 text-muted-custom">No sales transactions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

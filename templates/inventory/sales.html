@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Record Sale (POS){% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h3 class="fw-bold mb-0">Point of Sale (POS)</h3>
+        <p class="small text-muted-custom mb-0">FEFO (First-Expired, First-Out) ordered product selection</p>
+    </div>
+    <a href="{% url 'sales_history' %}" class="btn btn-outline-primary w-100 w-md-auto">
+        <i class="bi bi-clock-history me-1"></i>View Full Sales History
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-header fw-bold">Record Customer Purchase</div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Select Product (In Stock) *</label>
+                        {{ form.product }}
+                        <div class="form-text">{{ form.product.help_text }}</div>
+                        {% if form.product.errors %}<div class="text-danger small mt-1">{{ form.product.errors|striptags }}</div>{% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Quantity Sold *</label>
+                        {{ form.quantity_sold }}
+                        {% if form.quantity_sold.errors %}<div class="text-danger small mt-1">{{ form.quantity_sold.errors|striptags }}</div>{% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 fw-semibold">
+                        <i class="bi bi-cart-check me-1"></i>Complete Sale & Deduct Stock
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-header fw-bold">Recent Transactions</div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Total (₦)</th>
+                            <th>Sold By</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sale in recent_sales %}
+                        <tr>
+                            <td class="fw-semibold text-break">{{ sale.product.name }}</td>
+                            <td>{{ sale.quantity_sold }}</td>
+                            <td class="fw-bold text-success">₦{{ sale.total_amount|floatformat:2|intcomma }}</td>
+                            <td>{{ sale.sold_by.username|default:"Staff" }}</td>
+                            <td class="small">{{ sale.sold_at|date:"d M Y, H:i" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted-custom">No sales recorded yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

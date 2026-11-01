@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Automated Alert Logs{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h3 class="fw-bold mb-0">Automated Alert Dispatch Logs</h3>
+        <p class="small text-muted-custom mb-0">Audit trail of Email, Termii SMS, and WhatsApp notifications</p>
+    </div>
+    <form method="post" class="w-100 w-md-auto">
+        {% csrf_token %}
+        <button type="submit" name="run_manual_check" class="btn btn-warning fw-semibold w-100 w-md-auto">
+            <i class="bi bi-send-check me-1"></i>Trigger Expiry Check Now
+        </button>
+    </form>
+</div>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-12 col-sm-5">
+                <label class="form-label small fw-semibold mb-1">Channel</label>
+                <select name="type" class="form-select">
+                    <option value="">All Channels</option>
+                    <option value="Email" {% if selected_type == 'Email' %}selected{% endif %}>Email</option>
+                    <option value="SMS" {% if selected_type == 'SMS' %}selected{% endif %}>SMS (Termii)</option>
+                    <option value="WhatsApp" {% if selected_type == 'WhatsApp' %}selected{% endif %}>WhatsApp (Termii)</option>
+                </select>
+            </div>
+            <div class="col-12 col-sm-5">
+                <label class="form-label small fw-semibold mb-1">Delivery Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="sent" {% if selected_status == 'sent' %}selected{% endif %}>Sent</option>
+                    <option value="failed" {% if selected_status == 'failed' %}selected{% endif %}>Failed</option>
+                </select>
+            </div>
+            <div class="col-12 col-sm-2">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Channel</th>
+                    <th>Status</th>
+                    <th>Message Preview</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td class="fw-semibold text-break">
+                        <a href="{% url 'product_detail' log.product.pk %}" class="text-decoration-none">{{ log.product.name }}</a>
+                    </td>
+                    <td><span class="badge bg-secondary">{{ log.alert_type }}</span></td>
+                    <td>
+                        <span class="badge {% if log.status == 'sent' %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ log.status|upper }}
+                        </span>
+                    </td>
+                    <td class="small text-break" style="max-width: 380px;">{{ log.message|linebreaksbr }}</td>
+                    <td class="small">{{ log.created_at|date:"d M Y, H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-muted-custom">No alert logs recorded yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

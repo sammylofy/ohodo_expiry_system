@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Delete Supplier{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-12 col-md-8 col-lg-5">
+        <div class="card shadow-sm border-danger">
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-trash3-fill text-danger display-4 mb-3 d-block"></i>
+                <h4 class="fw-bold">Delete Supplier?</h4>
+                <p class="text-muted-custom">Are you sure you want to delete <strong>{{ supplier.name }}</strong>?</p>
+                <form method="post" class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4 w-100 w-md-auto">Yes, Delete</button>
+                    <a href="{% url 'supplier_list' %}" class="btn btn-outline-secondary px-4 w-100 w-md-auto">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

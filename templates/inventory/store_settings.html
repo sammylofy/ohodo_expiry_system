@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Store Settings{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h3 class="fw-bold mb-0">Store Profile & Alert Recipient Settings</h3>
+        <p class="small text-muted-custom mb-0">Singleton store configuration for automated Email, SMS & WhatsApp alerts</p>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-3 p-md-4">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Store Name *</label>
+                    {{ form.store_name }}
+                    {% if form.store_name.errors %}<div class="text-danger small">{{ form.store_name.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Owner Alert Email *</label>
+                    {{ form.owner_email }}
+                    {% if form.owner_email.errors %}<div class="text-danger small">{{ form.owner_email.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold">Owner Phone (234xxxxxxxxxx) *</label>
+                    {{ form.owner_phone }}
+                    <div class="form-text">{{ form.owner_phone.help_text }}</div>
+                    {% if form.owner_phone.errors %}<div class="text-danger small">{{ form.owner_phone.errors|striptags }}</div>{% endif %}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Store Physical Address *</label>
+                    {{ form.address }}
+                    {% if form.address.errors %}<div class="text-danger small">{{ form.address.errors|striptags }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <button type="submit" class="btn btn-primary px-4 w-100 w-md-auto">
+                    <i class="bi bi-save me-1"></i>Save Store Settings
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
